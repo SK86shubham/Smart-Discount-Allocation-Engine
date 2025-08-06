@@ -70,25 +70,6 @@ Each attribute’s contribution is **customizable via **`` for flexibility.
 
 ---
 
-### ⚙️ Configurable Settings (via `config/weights.json`)
-
-{
-  "weights": {
-    "performanceScore": 0.4,
-    "seniorityMonths": 0.2,
-    "targetAchievedPercent": 0.3,
-    "activeClients": 0.1
-  },
-  "minPerAgent": 300,
-  "maxPerAgent": 1000
-}
-
-
-- Weights allow tuning of business priorities
-- Min/Max limits ensure allocations stay reasonable
-
----
-
 ### 📁 Project Structure (MVC)
 
 .
