@@ -1,130 +1,67 @@
-💼 Smart Discount Allocation Engine
-📌 Problem Statement
-A company operating across multiple locations needs to distribute a fixed discount pool
- (called the discount kitty) among its sales agents. Each agent has different attributes
-  such as:
+📁 Folder & File Structure Documentation
+Your project uses a clean MVC (Model-View-Controller) inspired architecture for better separation of concerns, maintainability, and extensibility.
 
-Performance score
-Seniority (months worked)
-Target achievement %
-Number of active clients
+✅ 1. main/app.js – Application Entry Point (Controller Layer)
+Purpose: Acts as the starting point of the application.
 
-The challenge is to allocate the kitty in a way that is:
+Responsibilities:
+Imports configuration and sample data
+Calls the allocation logic from the service layer
+Passes the result to the view for display
 
-Fair
-Explainable
-Data-driven
-Extensible and automated for future use
+Why: Keeps control logic centralized and manageable.
 
-🎯 Objective
-Build a CLI/script-based tool that:
+✅ 2. services/discountService.js – Business Logic (Model Layer)
 
-Accepts:
+Purpose: Core logic to allocate discounts among agents.
 
-The total discount kitty (e.g., ₹10,000)
+Responsibilities:
+Normalize agent attributes
+Calculate scores using weights
+Allocate base and bonus amounts
+Handle rounding edge cases and constraints (min/max)
 
-List of agents and their attributes
+Why: All core calculations are kept separate from the UI and data for clean logic flow.
 
+✅ 3. views/outputView.js – Output Presentation (View Layer)
 
-Outputs:
+Purpose: Responsible for presenting the results.
 
-A JSON object with:
+Responsibilities:
+Pretty print final allocations and summary
+Format JSON output in a readable way
 
-Allocation per agent
+Why: Keeps output formatting cleanly separated from logic.
 
-Brief justification for each agent
+✅ 4. data/sampleInput.js – Sample Agent Data
 
-Ensures:
+Purpose: Provides input data (agents list with attributes).
 
-Kitty is not exceeded
+Responsibilities:
+Export sample agents with fields like id, performanceScore, targetAchievedPercent, etc.
 
-Allocation logic is fair and explainable
-
-Code is modular and future-proof
-
-💡 Approach
-We use a Base Amount + Weighted Bonus strategy:
-
-1. Base Amount Allocation
-Each agent receives a guaranteed fixed base (e.g., ₹500) to ensure:
-
-Fairness for minimum effort
-
-Simplicity in understanding
-
-This also safeguards against scenarios where a high-performing agent might dominate the entire pool — some amount is still fairly distributed to all.
-
-2. Bonus Pool Allocation
-Remaining kitty (after base distribution) is split based on:
-
-Normalized and weighted scores from agent attributes:
-
-Performance score
-
-Seniority
-
-Target achievement
-
-Active clients
-
-Each attribute’s contribution is customizable via config/weights.json for flexibility.
-
-3. Rounding-Safe Distribution
-Bonus amounts are calculated with Math.floor to prevent exceeding the kitty
-
-Any small leftover amount (from rounding) is assigned to the top-ranked agent
+Why: Helps with consistent testing and reproducibility.
 
 
-📁 Project Structure (MVC)
-bash
-Copy
-Edit
-.
-├── main/
-│   └── app.js                # Entry point
-├── services/
-│   └── discountService.js    # Allocation logic
-├── sampledata/
-│   └── sampleInput.js        # Sample agent input
-├── views/
-│   └── outputView.js         # Output formatting
-└── test/
-    └── testCases.js          # Unit test scenarios
-✅ Test Scenarios Included
-Normal Case – Varied agent scores
+✅ 5. test/testCases.js – Unit Testing File
+Purpose: Validate the correctness of the allocation logic.
 
-All-Same Scores – Identical attributes for fairness check
+Responsibilities:
+Contains 3 test cases:
+Normal case
+All-same values
+Rounding edge case
 
-Rounding Edge Case – Tests leftover kitty handling
+Why:
+Ensures reliability
 
-🧪 How to Run
-Clone the repo
+Protects against regressions
 
-Make sure you have Node.js installed
+🧠 Justification for MVC Structure
+Layer	                              Reason
+Controller	                    Centralized control flow, keeps logic out of main file
+Model (Service)              	Clean, modular business logic, easy to test and update
+View	                        Isolated output formatting, reusable and changeable independently
+Config	                        Decouples logic from values, allowing flexibility
+Data/Test	                    Ensures consistent inputs and safe automated testing
 
-Run:
-node main/app.js
-
-📊 Example Output
-{
-  "allocations": [
-    {
-      "id": "A1",
-      "allocatedAmount": 900,
-      "justification": "High performance and target achievement"
-    },
-    ...
-  ],
-  "summary": {
-    "totalAllocated": 10000,
-    "remainingKitty": 0
-  }
-}
-✅ Why Base + Weighted Bonus?
-Reason	Base Amount	Weighted Bonus
-Ensures fairness	✅	❌
-Rewards top performers	❌	✅
-Prevents outliers from dominating	✅	❌
-Reflects real contribution	❌	✅
-
-Using both guarantees fairness and recognizes excellence.
